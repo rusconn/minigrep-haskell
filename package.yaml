@@ -1,0 +1,89 @@
+name:                minigrep-haskell
+version:             0.1.0.0
+github:              rusconn/minigrep-haskell
+license:             BSD3
+author:              rusconn
+maintainer:          rusconn3@gmail.com
+copyright:           (c) 2020, rusconn
+
+extra-source-files:
+- README.md
+
+description:         Please see the README on Github at <https://github.com/rusconn/minigrep-haskell#readme>
+
+dependencies:
+- base >= 4.11 && < 10
+- rio >= 0.1.17.0
+
+ghc-options:
+- -O2
+- -Wall
+- -Wcompat
+- -Widentities
+- -Wincomplete-record-updates
+- -Wincomplete-uni-patterns
+- -Wpartial-fields
+- -Wredundant-constraints
+
+library:
+  source-dirs: src
+
+executables:
+  minigrep:
+    main:                Main.hs
+    source-dirs:         app
+    dependencies:
+    - minigrep-haskell
+
+tests:
+  minigrep-test:
+    main:                Tasty.hs
+    source-dirs:         test
+    dependencies:
+    - minigrep-haskell
+    - tasty
+    - tasty-hunit
+
+default-extensions:
+- BangPatterns
+- BinaryLiterals
+- BlockArguments
+- ConstraintKinds
+- DataKinds
+- DefaultSignatures
+- DeriveDataTypeable
+- DeriveFoldable
+- DeriveFunctor
+- DeriveGeneric
+- DeriveTraversable
+- DoAndIfThenElse
+- EmptyDataDecls
+- ExistentialQuantification
+- FlexibleContexts
+- FlexibleInstances
+- FunctionalDependencies
+- GADTs
+- GeneralizedNewtypeDeriving
+- InstanceSigs
+- KindSignatures
+- LambdaCase
+- MultiParamTypeClasses
+- MultiWayIf
+- NamedFieldPuns
+- NoImplicitPrelude
+- OverloadedLists
+- OverloadedStrings
+- PartialTypeSignatures
+- PatternGuards
+- PolyKinds
+- RankNTypes
+- RecordWildCards
+- ScopedTypeVariables
+- StandaloneDeriving
+- Strict
+- StrictData
+- TupleSections
+- TypeApplications
+- TypeFamilies
+- TypeSynonymInstances
+- ViewPatterns
