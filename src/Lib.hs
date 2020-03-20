@@ -2,7 +2,8 @@ module Lib where
 
 import           RIO
 import           RIO.Process
-import qualified RIO.Text    as T
+import qualified RIO.Text         as T
+import qualified RIO.Vector.Boxed as VB
 
 import           App
 
@@ -26,10 +27,10 @@ run Config {..} = do
   let results = search query contents caseSensitive
   for_ results $ logInfo . display
 
-search :: Text -> Text -> Bool -> [Text]
+search :: Text -> Text -> Bool -> Vector Text
 search query contents caseSensitive =
   let lowerQuery = T.toLower query
       predicate  = if caseSensitive
         then T.isInfixOf query
         else T.isInfixOf lowerQuery . T.toLower
-   in filter predicate $ T.lines contents
+   in VB.filter predicate . VB.fromList $ T.lines contents
