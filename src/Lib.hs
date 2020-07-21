@@ -2,8 +2,9 @@ module Lib where
 
 import           RIO
 import           RIO.Process
-import qualified RIO.Text         as T
-import qualified RIO.Vector.Boxed as VB
+import qualified RIO.Text    as T
+
+import           Conduit
 
 import           App
 
@@ -21,16 +22,17 @@ newConfig = \case
     do Config (T.pack query) filename . isNothing
     do lookupEnvFromContext "CASE_INSENSITIVE"
 
-run :: Config -> App ()
-run Config {..} = do
-  contents <- readFileUtf8 filename
-  let results = search query contents caseSensitive
-  for_ results $ logInfo . display
-
-search :: Text -> Text -> Bool -> Vector Text
-search query contents caseSensitive =
+run :: Config -> RIO SimpleApp ()
+run Config {..} =
   let lowerQuery = T.toLower query
       predicate  = if caseSensitive
         then T.isInfixOf query
         else T.isInfixOf lowerQuery . T.toLower
-   in VB.filter predicate . VB.fromList $ T.lines contents
+   in runConduitRes
+         $ sourceFile filename
+        .| decodeUtf8C
+        .| linesUnboundedC
+        .| filterC predicate
+        .| unlinesC
+        .| encodeUtf8C
+        .| stdoutC
